@@ -55,15 +55,7 @@ class MyWidget(QtWidgets.QWidget):
 def ocrStuff():
     reader = easyocr.Reader(['en'])
     result = reader.readtext(IMAGE_PATH)
-
-    readText = []
-
-    spacer = 100
-    for detection in result: 
-        text = detection[1]
-        spacer+=15
-        readText.append(text + '\n')
-
+    readText = [tup[1] + '\n' for tup in result]
     pyperclip.copy(''.join(readText))
 
 if __name__ == '__main__':
