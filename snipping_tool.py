@@ -1,11 +1,9 @@
 import sys
+from PyQt5 import QtWidgets, QtCore, QtGui
 import tkinter as tk
-
-import cv2
+from PIL import ImageGrab
 import easyocr
 import pyperclip
-from PIL import ImageGrab
-from PyQt5 import QtCore, QtGui, QtWidgets
 
 IMAGE_PATH = 'capture.jpg'
 
@@ -53,12 +51,19 @@ class MyWidget(QtWidgets.QWidget):
         img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
         img.save(IMAGE_PATH)
         ocrStuff()
-        cv2.destroyAllWindows()
 
 def ocrStuff():
     reader = easyocr.Reader(['en'])
     result = reader.readtext(IMAGE_PATH)
-    readText = [tup[1] + '\n' for tup in result]
+
+    readText = []
+
+    spacer = 100
+    for detection in result: 
+        text = detection[1]
+        spacer+=15
+        readText.append(text + '\n')
+
     pyperclip.copy(''.join(readText))
 
 if __name__ == '__main__':
